@@ -2,12 +2,12 @@
 - Open your terminal
 - Change directory you want
 - Type `git clone https://github.com/FawwazCode/fintech-school.git` in terminal
-- After that, type `cd school-fintech-template` to enter the `fintech-school` directory
+- After that, type `cd fintech-school` to enter the `fintech-school` directory
 - Type `composer install` in terminal
 - After that, type `npm install` in terminal 
 
 ## How to Run
-- Create a database with the name `school-fintech-template` (you can change the database name)
+- Create a database with the name `fintech-school` (you can change the database name)
 - Type `cp .env.example .env` in terminal OR `copy .env.example .env` in cmd
 - Adjust the `DB_DATABASE` in `.env` file according the database you created 
 - Type `php artisan key:generate` in terminal
