@@ -1,16 +1,3 @@
-<p align="center"><kbd><a href="./public/assets/img/screenshot.png" target="_blank"><img src="./public/assets/img/screenshot.png" width="1000"></a></kbd></p>
-
-<p align="center">
-    <a href="https://laravel.com/docs/9.x"><img src="https://img.shields.io/badge/v9.2-Laravel-F9322C" alt="Laravel"></a>
-    <a href="https://getbootstrap.com/docs/5.0x"><img src="https://img.shields.io/badge/v5.0-Bootstrap-7952b3" alt="Bootstrap"></a>
-    <a href="https://fontawesome.com/icons"><img src="https://img.shields.io/badge/v6.0-Font%20Awesome-146EBE" alt="Bootstrap"></a>
-</p>
-<h1 align="center"><b>School Fintech Template</b></h1>
-
-
-## About
-School Fintech Template is based on the [SB Admin 2 Laravel Component](https://github.com/rexencorp/sb-admin-2-component) template.
-
 ## How To Install
 - Open your terminal
 - Change directory you want
