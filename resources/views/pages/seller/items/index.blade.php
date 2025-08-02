@@ -9,27 +9,30 @@
                 <x-button outline type="submit" value="Search" />
             </x-form>
         </x-card.head>
+
         <x-card.body class="table-responsive" style="min-height: 400px">
 
             <!-- MODAL ADD ITEM -->
-            <x-modal id="modalAddItem" title="Add Item" :action="route('items.store')">
+            <x-modal id="modalAddItem" title="Add Item" :action="route('items.store')" enctype="multipart/form-data">
                 <x-modal.body>
                     <x-input type="text" name="name" label="Name:" class="mb-3" />
                     <x-input type="number" name="stock" label="Stock:" class="mb-3" />
                     <x-input type="number" name="price" label="Price:" class="mb-3" />
                     <x-input.label value="Description:" />
                     <textarea name="desc" class="form-control mb-3" style="height: 80px"></textarea>
+                    <x-input type="file" name="image" label="Image:" class="mb-3" />
                 </x-modal.body>
             </x-modal>
 
             <!-- MODAL EDIT ITEM -->
-            <x-modal id="modalEditItem" title="Edit Item" action=" " method="PUT">
+            <x-modal id="modalEditItem" title="Edit Item" action=" " method="PUT" enctype="multipart/form-data">
                 <x-modal.body>
                     <x-input type="text" name="name" label="Name:" class="mb-3" />
                     <x-input type="number" name="stock" label="Stock:" class="mb-3" />
                     <x-input type="number" name="price" label="Price:" class="mb-3" />
                     <x-input.label value="Description:"/>
                     <textarea name="desc" class="form-control mb-3" style="height: 80px"></textarea>
+                    <x-input type="file" name="image" label="Image:" class="mb-3" />
                 </x-modal.body>
             </x-modal>
 
@@ -41,11 +44,11 @@
                         <th>Stock</th>
                         <th>Price</th>
                         <th>Desc</th>
+                        <th>Image</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-
                     @foreach($items as $item)
                     @php
                         $page    = $items->currentPage();
@@ -59,10 +62,14 @@
                         <td class="align-middle">{{ $item->stock }}</td>
                         <td class="align-middle">{{ $item->price }}</td>
                         <td class="align-middle">
-                            <textarea
-                                class="form-control"
-                                readonly
-                                >{{ $item->desc }}</textarea>
+                            <textarea class="form-control" readonly>{{ $item->desc }}</textarea>
+                        </td>
+                        <td class="align-middle">
+                            @if ($item->image)
+                                <img src="{{ asset('storage/' . $item->image) }}" width="60" height="60" class="rounded">
+                            @else
+                                <span class="text-muted">No Image</span>
+                            @endif
                         </td>
                         <td class="align-middle">
                             <x-view>
@@ -76,7 +83,6 @@
                         </td>
                     </tr>
                     @endforeach
-
                 </tbody>
             </table>
 

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('seller_id')->constrained('users');
             $table->string('name', 100);
             $table->string('desc')->nullable();
+            $table->string('image')->nullable();
             $table->bigInteger('stock')->default(0);
             $table->bigInteger('price');
             $table->smallInteger('status')->default(1);

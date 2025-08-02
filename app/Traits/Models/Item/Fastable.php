@@ -10,7 +10,7 @@ use App\Traits\Models\Searchable;
 trait Fastable{
     public function scopeFastPaginate($query, $data=[]) {
         $data   = (object) $data;
-        $search = $data->search ?? null; 
+        $search = $data->search ?? null;
         $items  = $query->with(['seller'])->latest();
 
         if($search) $items = $items->search($search);
@@ -18,67 +18,72 @@ trait Fastable{
         $items = $items
             ->paginate(10)
             ->withQueryString();
-        
+
         return $items;
     }
-    
 
-    public function scopeFastCreate($query, $data, $user=null) {
-        $data       = (object) $data;
-        $userId     = $user->id ?? null;
-        $user       = isset($user) ? User::find($userId ?? $user) : auth()->user();
-        $validator  = Validator::make($data->all() ?? $data, [
-            'name'  => 'required|min:2|max:50',
-            'stock' => 'nullable|numeric|digits_between:1,18',
-            'price' => 'required|numeric|digits_between:1,18',
-            'desc'  => 'nullable|max:255',
-        ]);
 
-        if($validator->fails()) {
-            $error = $validator->errors()->first();
-            throw new Exception($error);
-        }
+    public function scopeFastCreate($query, $data, $user = null) {
+    $data   = (object) $data;
+    $user   = $user ? User::find($user->id ?? $user) : auth()->user();
 
-        $item = Item::create([
-            'seller_id' => $user->id,
-            'name'      => $data->name,
-            'stock'     => $data->stock,
-            'price'     => $data->price,
-            'desc'      => $data->desc,
-        ]);
+    $validator = Validator::make($data->all() ?? $data, [
+        'name'  => 'required|min:2|max:50',
+        'stock' => 'nullable|numeric|digits_between:1,18',
+        'price' => 'required|numeric|digits_between:1,18',
+        'desc'  => 'nullable|max:255',
+        'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
 
-        return $item;
-    }
-    
-    
-    public function scopeFastUpdate($query, $data, $item) {        
-        $itemId     = $item->id ?? null;
-        $item       = Item::find($itemId ?? $item);
-        $data       = (object) $data;
-        $validator  = Validator::make($data->all() ?? $data, [
-            'name'  => 'nullable|min:2|max:50',
-            'stock' => 'nullable|numeric|digits_between:1,18',
-            'price' => 'nullable|numeric|digits_between:1,18',
-            'desc'  => 'nullable|max:255',
-        ]);
-        
-        if(!$item) throw new Exception('Item not found');
-        if($item->seller_id !== auth()->id()) throw new Exception('Forbidden');
-        if($validator->fails()) {
-            $error = $validator->errors()->first();
-            throw new Exception($error);
-        }
+    if ($validator->fails()) throw new \Exception($validator->errors()->first());
 
-        $item->update([
-            'name'  => $data->name ?? $item->name,
-            'stock' => $data->stock ?? $item->stock,
-            'price' => $data->price ?? $item->price,
-            'desc'  => $data->desc,
-        ]);
-
-        return $item;
+    $imagePath = null;
+    if (request()->hasFile('image')) {
+        $imagePath = request()->file('image')->store('images', 'public');
     }
 
+    return Item::create([
+        'seller_id' => $user->id,
+        'name'      => $data->name,
+        'stock'     => $data->stock,
+        'price'     => $data->price,
+        'desc'      => $data->desc,
+        'image'     => $imagePath,
+    ]);
+}
+
+    public function scopeFastUpdate($query, $data, $item) {
+    $item = Item::find($item->id ?? $item);
+    $data = (object) $data;
+
+    if (!$item) throw new \Exception('Item not found');
+    if ($item->seller_id !== auth()->id()) throw new \Exception('Forbidden');
+
+    $validator = Validator::make($data->all() ?? $data, [
+        'name'  => 'nullable|min:2|max:50',
+        'stock' => 'nullable|numeric|digits_between:1,18',
+        'price' => 'nullable|numeric|digits_between:1,18',
+        'desc'  => 'nullable|max:255',
+        'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
+
+    if ($validator->fails()) throw new \Exception($validator->errors()->first());
+
+    $imagePath = $item->image;
+    if (request()->hasFile('image')) {
+        $imagePath = request()->file('image')->store('images', 'public');
+    }
+
+    $item->update([
+        'name'  => $data->name ?? $item->name,
+        'stock' => $data->stock ?? $item->stock,
+        'price' => $data->price ?? $item->price,
+        'desc'  => $data->desc,
+        'image' => $imagePath,
+    ]);
+
+    return $item;
+}
 
     public function scopeFastDelete($query, $item) {
         $itemId = $item->id ?? null;
