@@ -12,6 +12,7 @@
 - Adjust the `DB_DATABASE` in `.env` file according the database you created 
 - Type `php artisan key:generate` in terminal
 - Type `php artisan migrate --seed` in terminal
+- Type 'php artisan storage:link' in terminal
 - After that serve the project with `php artisan serve` in your terminal
 - Open http://127.0.0.1:8000/ in your browser.
 - Voila! your project is ready to use
