@@ -208,7 +208,4 @@ Fast Methods makes it easy for you to manipulate databases through models
     ***
 
 
-## License
-
-The School Fintech Template is open-sourced template licensed under the [MIT license](https://opensource.org/licenses/MIT).
 "# fintech-school" 
