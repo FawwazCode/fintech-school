@@ -5,25 +5,24 @@ namespace App\Traits\Models\Item;
 use App\Models\{Item, User};
 use Exception;
 use Illuminate\Support\Facades\Validator;
-use App\Traits\Models\Searchable;
 
-trait Fastable{
-    public function scopeFastPaginate($query, $data=[]) {
+trait Fastable
+{
+    public function scopeFastPaginate($query, $data = [])
+    {
         $data   = (object) $data;
         $search = $data->search ?? null;
         $items  = $query->with(['seller'])->latest();
 
-        if($search) $items = $items->search($search);
+        // Cek apakah model punya method scopeSearch
+        if ($search && method_exists($query->getModel(), 'scopeSearch')) {
+            $items = $items->search($search);
+        }
 
-        $items = $items
-            ->paginate(10)
-            ->withQueryString();
-
-        return $items;
+        return $items->paginate(10)->withQueryString();
     }
 
-
-    public function scopeFastCreate($query, $data, $user = null) {
+     public function scopeFastCreate($query, $data, $user = null) {
     $data   = (object) $data;
     $user   = $user ? User::find($user->id ?? $user) : auth()->user();
 

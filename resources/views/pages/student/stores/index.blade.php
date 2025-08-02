@@ -1,99 +1,90 @@
-<x-layout app>
-    <x-layout.section title="Items" />
-    <x-card class="mb-4">
-        <x-card.head>
-            <x-text bold color="primary" value="Items" />
-            <x-form method="GET" class="ms-auto d-none d-md-flex">
-                <x-input name="search" placeholder="Search..." value="{{ request()->search ?? '' }}" class="me-2"/>
-                <x-button outline type="submit" value="Search" />
-            </x-form>
-        </x-card.head>
-        <x-card.body class="table-responsive" style="min-height: 400px">
+@extends('layouts.app')
 
-             <!-- MODAL SHOW PRODUCT -->
-             <x-modal id="modalShowProduct" title=" " :action="route('users.import')">
-                <x-modal.body>
-                    <div class="mb-1">Price: <span id="productPrice"></span></div>
-                    <div class="mb-1">Stock: <span id="productStock"></span></div>
-                    <div class="mb-3">Seller: <span id="productSeller"></span></div>
-                    <x-input.label>Description:</x-input.label>
-                    <textarea id="productDesc"  class="form-control" style="height: 100px" readonly></textarea>
-                </x-modal.body>
-                <x-modal.foot>
-                    <x-button outline color="secondary" data-bs-dismiss="modal" value="Close" />
-                </x-modal.foot>
-            </x-modal>
+@section('content')
+<div class="container">
+    <h2 class="mb-4">Daftar Produk</h2>
 
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>Product</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
+    {{-- Form Search --}}
+    <form method="GET" action="{{ route('stores.index') }}" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="search" class="form-control" placeholder="Cari produk..." value="{{ request('search') }}">
+            <button class="btn btn-outline-primary" type="submit">Cari</button>
+        </div>
+    </form>
 
-                    @foreach($items as $item)
-                    @php
-                        $page    = $items->currentPage();
-                        $perPage = $items->perPage();
-                        $number  = $loop->iteration + $perPage * ($page-1);
-                    @endphp
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach($items as $item)
+        @php
+            $imageUrl = $item->image
+                ? asset('storage/' . $item->image)
+                : asset('images/default.png'); // default jika gambar tidak ada
+        @endphp
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden hover-shadow transition-all">
+                <img src="{{ $imageUrl }}" class="card-img-top" alt="{{ $item->name }}" style="height: 200px; object-fit: cover;">
+                <div class="card-body d-flex flex-column p-4">
+                    <h5 class="card-title fw-semibold text-dark">{{ $item->name }}</h5>
+                    <p class="card-text text-muted mb-1">Stock: <strong>{{ $item->stock }}</strong></p>
+                    <p class="card-text text-muted mb-3">Harga: <span class="text-success fw-bold">Rp{{ number_format($item->price, 0, ',', '.') }}</span></p>
 
-                    <tr>
-                        <td class="align-middle">
-                            <h6 class="fw-bold m-0">{{ $item->name }}</h6>
-                            <small>
-                                Stock: {{ number_format($item->stock) }}
-                                {{'@'. number_format($item->price) }}
-                            </small>
-                        </td>
-                        <td class="align-middle">
-                            <x-view>
-                                <x-button outline :data="$item" data-bs-toggle="modal" data-bs-target="#modalShowProduct">
-                                    <i class="fas fa-eye"></i>
-                                </x-button>
-                                <x-button :action="route('stores.store', [$item->id])" class="ms-2">
-                                    <i class="fas fa-cart-plus"></i>
-                                </x-button>
-                            </x-view>
-                        </td>
-                    </tr>
-                    @endforeach
+                    <div class="mt-auto d-flex justify-content-end">
+                        {{-- Tombol Beli --}}
+                        <x-button :action="route('stores.store', [$item->id])" class="btn btn-primary rounded-pill px-4 py-2" style="width: 300px;">
+                            <i class="fas fa-cart-plus me-1"></i> Beli
+                        </x-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endforeach
+    </div>
 
-                </tbody>
-            </table>
+    {{-- Pagination --}}
+    <div class="mt-4 d-flex justify-content-center">
+        {{ $items->links() }}
+    </div>
+</div>
 
-            {{ $items->links() }}
-        </x-card.body>
-    </x-card>
+{{-- Modal Detail Produk --}}
+{{-- <div class="modal fade" id="modalShowProduct" tabindex="-1" aria-labelledby="modalShowProductLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Detail Produk</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+            </div>
+            <div class="modal-body">
+                <img id="modalImage" class="img-fluid mb-3" alt="Gambar Produk">
+                <h5 id="modalName"></h5>
+                <p id="modalDesc"></p>
+                <p><strong>Stock:</strong> <span id="modalStock"></span></p>
+                <p><strong>Harga:</strong> Rp<span id="modalPrice"></span></p>
+            </div>
+        </div>
+    </div>
+</div> --}}
 
-    <x-layout.section scripts>
-        <script>
-            const onClickHandler = (data, action=null) => {
-                const modal   = document.querySelector(`#modalShowProduct`);
-                const form    = modal.querySelector('.modal-content form');
-                const elmnts  = {
-                    title : modal.querySelector('.modal-title'),
-                    price : form.querySelector('#productPrice'),
-                    stock : form.querySelector('#productStock'),
-                    seller: form.querySelector('#productSeller'),
-                    desc  : form.querySelector('#productDesc'),
-                };
+@endsection
 
-                elmnts.title.innerText  = data.name;
-                elmnts.price.innerText  = Intl.NumberFormat('en-EN').format(data.price);
-                elmnts.stock.innerText  = Intl.NumberFormat('en-EN').format(data.stock);
-                elmnts.seller.innerText = data.seller.name;
-                elmnts.desc.value = data.desc;
-            }
+@push('scripts')
+<script>
+    const modalShowProduct = document.getElementById('modalShowProduct');
+    modalShowProduct.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+        const item = JSON.parse(button.getAttribute('data-item'));
 
-            document.querySelectorAll('*[data-bs-target="#modalShowProduct"]')
-            .forEach(button => button.addEventListener('click', () => {
-                const data = JSON.parse(button.getAttribute('data'));
-                console.log(data);
-                onClickHandler(data);
-            }))
-        </script>
-    </x-layout.section>
-</x-layout>
+        const modalImage = modalShowProduct.querySelector('#modalImage');
+        const modalName = modalShowProduct.querySelector('#modalName');
+        const modalDesc = modalShowProduct.querySelector('#modalDesc');
+        const modalStock = modalShowProduct.querySelector('#modalStock');
+        const modalPrice = modalShowProduct.querySelector('#modalPrice');
+
+        modalImage.src = item.image ? `/storage/images/${item.image}` : '/images/default.png';
+        modalImage.alt = item.name;
+        modalName.textContent = item.name;
+        modalDesc.textContent = item.desc || '-';
+        modalStock.textContent = item.stock;
+        modalPrice.textContent = Number(item.price).toLocaleString('id-ID');
+    });
+</script>
+@endpush

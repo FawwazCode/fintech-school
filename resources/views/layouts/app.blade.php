@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/fontawesome-free/css/all.min.css') }}">
     <link rel="icon" href="{{ asset('assets/img/brand.png') }}">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <meta charset="UTF-8">
     <meta name="author" content="Abdul">
     <meta name="description" content="Type your web description">
@@ -32,7 +34,7 @@
             <x-footer/>
         </div>
     </div>
-    
+
     <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
