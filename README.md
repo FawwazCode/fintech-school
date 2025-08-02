@@ -1,8 +1,8 @@
 ## How To Install
 - Open your terminal
 - Change directory you want
-- Type `git clone --branch main https://github.com/rexencorp/school-fintech-template` in terminal
-- After that, type `cd school-fintech-template` to enter the `school-fintech-template` directory
+- Type `git clone https://github.com/FawwazCode/fintech-school.git` in terminal
+- After that, type `cd school-fintech-template` to enter the `fintech-school` directory
 - Type `composer install` in terminal
 - After that, type `npm install` in terminal 
 
