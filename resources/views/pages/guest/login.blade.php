@@ -4,7 +4,7 @@
 <style>
     body{
         height: 100vh;
-        background-color: var(--bs-primary);
+        background-color: var(--bs-cyan);
         background-size: cover;
         background-position: center;
         backdrop-filter: brightness(80%);
@@ -12,7 +12,7 @@
 
     .bg-login-image{
         padding-top: 50%;
-        background-color: var(--bs-primary);
+        background-color: var(--bs-cyan);
         background-image: url("{{ asset('assets/img/background/login.svg') }}");
     }
 </style>
