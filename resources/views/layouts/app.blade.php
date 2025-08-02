@@ -5,13 +5,13 @@
     <title>@yield('title')</title>
     <link rel="stylesheet" href="{{ asset('assets/css/app.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/fontawesome-free/css/all.min.css') }}">
-    <link rel="icon" href="{{ asset('assets/img/brand.png') }}">
+    <link rel="icon" href="{{ asset('group4.jpeg') }}">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <meta charset="UTF-8">
-    <meta name="author" content="Abdul">
-    <meta name="description" content="Type your web description">
+    <meta name="author" content="Group 4">
+    <meta name="description" content="Latihan USK kelompok 4">
     <meta name="theme-color" content="#FFF">
     <meta name="title" content="@yield('title')">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
